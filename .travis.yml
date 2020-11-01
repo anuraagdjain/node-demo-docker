@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+branches:
+  only:
+    - master
+
+language: node_js
+node_js:
+  - '14'
+
+before_install:
+  - echo -e "machine github.com\n  login $GIT_TOKEN" > ~/.netrc
+
+script:
+  - npm i
+  - npm run start &
+  - npm run test
+
+after_success:
+  - sh scripts/push-to-ecr.sh
